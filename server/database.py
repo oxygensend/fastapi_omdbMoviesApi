@@ -6,4 +6,4 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 
 database = client.movies
 
-user_collection = database.get_collection("susers_collection")
+user_collection = database.get_collection("users_collection")

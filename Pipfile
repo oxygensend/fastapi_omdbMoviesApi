@@ -7,6 +7,9 @@ name = "pypi"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 motor = "*"
+pydantic = {extras = ["email"], version = "*"}
+bcrypt = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 

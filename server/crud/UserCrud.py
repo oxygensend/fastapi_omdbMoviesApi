@@ -1,25 +1,26 @@
-from asyncio.windows_events import NULL
 from bson import ObjectId
-import CrudInterface
-from ..helpers import user_helper
+from .CrudInterface import CrudInterface
+from ..helpers.UserHelper import UserHelper
 from ..database import user_collection
 
 class UserCrud(CrudInterface):
 
+    userHelper = UserHelper()
+
     @classmethod
     async def retriveAll(cls) ->dict:
-        return [ user_helper(user) async for user in user_collection.find()]
+        return [ cls.userHelper(user) async for user in user_collection.find()]
 
     @classmethod
     async def retriveOne(cls, id: str) -> dict:
         user = await user_collection.find_one({"_id": ObjectId(id)})
-        return user_helper(user) if user else None
+        return cls.userHelper(user) if user else None
 
     @classmethod
     async def add(cls, data: dict) ->dict:
         user = await user_collection.insert_one(data)
         new_user = await user_collection.find_one({"_id": user.inserted_id})
-        return user_helper(new_user)
+        return cls.userHelper(new_user)
 
     @classmethod
     async def update(cls, data: dict) -> bool:
