@@ -9,5 +9,9 @@ class Response:
 
 
     @classmethod
-    def error(cls,error, code, message):
-        return {"error": error, "code": code, "message": message}
+    def error(cls,error,  message, code):
+        return {
+            "error": error,
+            "message": message,
+            "code": code 
+        }

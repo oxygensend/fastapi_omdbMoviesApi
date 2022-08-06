@@ -23,7 +23,7 @@ class UserCrud(CrudInterface):
         return cls.userHelper(new_user)
 
     @classmethod
-    async def update(cls, data: dict) -> bool:
+    async def update(cls, id: str,  data: dict) -> bool:
         if len(data) < 1:
             return False
         user = await user_collection.find_one({"_id": ObjectId(id)})

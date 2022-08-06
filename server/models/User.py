@@ -6,8 +6,12 @@ from passlib.context import CryptContext
 
 
 class UserSchema(BaseModel):
-    username: str = Field(...)
-    email: EmailStr = Field(...)
+    username: str = Field(
+        min_length=3, max_length=100, 
+    )
+    email: EmailStr = Field(
+      ...
+    )
     password: str = Field(...)
     isAdmin: bool = Field(...)
     createdAt: Optional[datetime] = datetime.now()
@@ -37,6 +41,18 @@ class UserUpdateSchema(BaseModel):
                 "password": "*********",
                 "isAdmin": True
                 
+            }
+        }
+
+class AuthSchema(BaseModel):
+    email: str = Field(...)
+    password: str = Field(...)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "email": "test@test.com",
+                "password": "*********",
             }
         }
 
