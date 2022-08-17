@@ -3,6 +3,8 @@ from lib2to3.pgen2.token import OP
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from passlib.context import CryptContext
+import jwt
+import main
 
 
 class UserSchema(BaseModel):
@@ -61,3 +63,4 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hashPassword(password) -> str :
     return pwd_context.hash(password)
+

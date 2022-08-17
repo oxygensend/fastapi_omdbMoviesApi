@@ -29,7 +29,7 @@ async def getUsers() -> dict:
     users = await UserCrud.retriveAll()
     return Response.json(users)
 
-@router.delete("/{id}",response_description="Delete user")
+@router.delete("/{id}",response_description="Delete user", )
 async def deleteUser(id: str) -> dict:
     return  Response.json(f"User {id} has been removed", 204) \
             if await UserCrud.delete(id) else \

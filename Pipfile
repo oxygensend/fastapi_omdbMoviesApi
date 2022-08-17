@@ -11,6 +11,8 @@ pydantic = {extras = ["email"], version = "*"}
 bcrypt = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
 pyjwt = "*"
+pytest = "*"
+requests = "*"
 
 [dev-packages]
 

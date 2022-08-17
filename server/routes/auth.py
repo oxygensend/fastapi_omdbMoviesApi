@@ -3,7 +3,7 @@ from distutils.log import error, info
 from re import U
 import sys
 from urllib import response
-
+from ..secret import SECRET_KEY
 import jwt
 sys.path.append("..") # Adds higher directory to python modules path.
 from datetime import date, datetime, timedelta
@@ -18,11 +18,11 @@ from ..models.User import AuthSchema, UserSchema, UserUpdateSchema, hashPassword
 from ..models.Response import Response
 from ..database import user_collection
 
-router1= APIRouter()
+router1 = APIRouter()
+router2 = APIRouter()
 
-SECRET_KEY = "BARDZO STRZEZONY KLUCZ"
 
-@router1.post('/auth', response_description="Get Authentication token" )
+@router1.post('/auth', response_description="Get Authentication token")
 async def login(data: AuthSchema) -> str :
     data = jsonable_encoder(data)
     main.logger.info(jsonable_encoder(data))
