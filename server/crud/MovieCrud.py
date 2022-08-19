@@ -1,14 +1,23 @@
 from bson import ObjectId
+
+from server.filters.MovieFilter import MovieFilter
 from .CrudInterface import CrudInterface
 from ..helpers.MovieHelper import MovieHelper
 from ..database import movies_collection
+import main
 
 class MovieCrud(CrudInterface):
 
     movieHelper = MovieHelper()
 
     @classmethod
-    async def retriveAll(cls) ->dict:
+    async def retriveAll(cls, params) ->dict:
+
+        if params:
+           filter = MovieFilter()
+           main.logger.info(filter)
+           return await filter.build(params)
+
         return [ cls.movieHelper(movie) async for movie in movies_collection.find()]
 
     @classmethod

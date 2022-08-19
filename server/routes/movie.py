@@ -12,7 +12,7 @@ from server.helpers.MovieParser import MovieParser
 from server.models.Movie import MovieSchema
 sys.path.append("..") # Adds higher directory to python modules path.
 from datetime import date, datetime
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Request
 from fastapi.encoders import jsonable_encoder
 
 import main
@@ -33,9 +33,11 @@ async def addMovie(data: MovieSchema = Body(...)) -> dict:
     
     return Response.json(newMovie, 201)
 
-@router.get("/", response_description="Movies retrived from database")
-async def getMovies() -> dict:
-    movies = await MovieCrud.retriveAll()
+@router.get("", response_description="Movies retrived from database")
+async def getMovies(request: Request) -> dict:
+    main.logger.info(request.query_params)
+    movies = await MovieCrud.retriveAll(request.query_params)
+    main.logger.info(movies)
     return Response.json(movies)
 
 @router.get("/{id}", response_description="Movie fetched from database")
