@@ -7,7 +7,7 @@ import main
 client = TestClient(main.app)
 
 
-def testAddMovie():
+def test_add_movie():
     response = client.post('/movies', json={
         "title": "The Fast and The Furious",
         "year": 2001

@@ -41,8 +41,8 @@ async def getMovies(request: Request) -> dict:
     return Response.json(movies)
 
 @router.get("/{id}", response_description="Movie fetched from database")
-async def getMovie(id: str) -> dict:
-    movie = await MovieCrud.retriveOne(id)
+async def getMovie(id: str, request: Request) -> dict:
+    movie = await MovieCrud.retriveOne(id, request.query_params)
     return Response.json(movie) \
            if movie else \
            Response.error("Page not found", f"Movie with id: {id} doesn't exist", 404)         

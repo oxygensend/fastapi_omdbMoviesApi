@@ -11,18 +11,28 @@ class MovieCrud(CrudInterface):
     movieHelper = MovieHelper()
 
     @classmethod
-    async def retriveAll(cls, params) ->dict:
+    async def retriveAll(cls, params: dict) ->dict:
 
         if params:
            filter = MovieFilter()
            main.logger.info(filter)
-           return await filter.build(params)
+           query, fields =  filter.build(params)
+        else:
+            query, fields = None, None
 
-        return [ cls.movieHelper(movie) async for movie in movies_collection.find()]
+        return [ cls.movieHelper(movie) async for movie in movies_collection.find(query , fields )]
 
     @classmethod
-    async def retriveOne(cls, id: str) -> dict:
-        movie = await movies_collection.find_one({"_id": ObjectId(id)})
+    async def retriveOne(cls, id: str, params: dict) -> dict:
+        
+        if params:
+           filter = MovieFilter()
+           _ , fields =  filter.build(params)
+        else:
+            fields = None
+
+
+        movie = await movies_collection.find_one({"_id": ObjectId(id)}, fields)
         return cls.movieHelper(movie) if movie else None
 
     @classmethod
