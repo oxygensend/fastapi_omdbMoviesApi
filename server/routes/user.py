@@ -4,7 +4,7 @@ import sys
 from urllib import response
 sys.path.append("..") # Adds higher directory to python modules path.
 from datetime import date, datetime
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Request
 from fastapi.encoders import jsonable_encoder
 
 
@@ -25,8 +25,8 @@ async def addUser(user: UserSchema = Body(...)) -> dict:
     return Response.json(new_user, 201)
 
 @router.get("/", response_description="Users retrived from database")
-async def getUsers() -> dict:
-    users = await UserCrud.retriveAll()
+async def getUsers(request: Request) -> dict:
+    users = await UserCrud.retriveAll(request.query_params)
     return Response.json(users)
 
 @router.delete("/{id}",response_description="Delete user", )

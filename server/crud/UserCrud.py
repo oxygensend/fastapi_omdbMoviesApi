@@ -1,18 +1,35 @@
+import imp
 from bson import ObjectId
 from .CrudInterface import CrudInterface
 from ..helpers.UserHelper import UserHelper
 from ..database import user_collection
+from ..filters.UserFilter import UserFilter
 
 class UserCrud(CrudInterface):
 
     userHelper = UserHelper()
 
     @classmethod
-    async def retriveAll(cls) ->dict:
-        return [ cls.userHelper(user) async for user in user_collection.find()]
+    async def retriveAll(cls, params) ->dict:
+
+        if params:
+           filter = UserFilter()
+           query, fields =  filter.build(params)
+        else:
+            query, fields = None, None
+
+
+        return [ cls.userHelper(user) async for user in user_collection.find(query, fields)]
 
     @classmethod
-    async def retriveOne(cls, id: str) -> dict:
+    async def retriveOne(cls, id: str, params) -> dict:
+        
+        if params:
+           filter = UserFilter()
+           _ , fields =  filter.build(params)
+        else:
+            fields = None
+
         user = await user_collection.find_one({"_id": ObjectId(id)})
         return cls.userHelper(user) if user else None
 

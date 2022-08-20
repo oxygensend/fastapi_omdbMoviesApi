@@ -9,23 +9,7 @@ from urllib.parse import  parse_qs
 
 class MovieFilter(AbstractFilter):
 
-    fields = dict()
-    query = dict()
-
-  
-    def _parseUrl(self, params) -> dict:
-        params = parse_qs(str(params))
-        return {k: v[0] for k, v in params.items()}
-
-
-    def _getFields(self, params) -> None:
-        if('fields' in params):
-            fields = params['fields'].split(",")
-            self.fields = { k:1 for k in fields }
-
-        if not 'id' in self.fields:
-            self.fields['_id'] = 0
-
+    
     def _getQuery(self, params) -> None:
 
         if('title' in params):
