@@ -18,10 +18,11 @@ router = APIRouter()
 @router.post("", response_description="User added into the database")
 async def addUser(user: UserSchema = Body(...)) -> dict:
     user = jsonable_encoder(user)
+    if await UserSchema.exists(user['email']):
+            return Response.error("Validation error", "User with this email already exists in database", 400)
+            
     user['password'] = hashPassword(user['password']);
     new_user = await UserCrud.add(user)
-    main.logger.info(new_user)
-    main.logger.info(user)
     return Response.json(new_user, 201)
 
 @router.get("", response_description="Users retrived from database")
@@ -42,7 +43,6 @@ async def updateUser(id:str, data: UserUpdateSchema = Body(...)) -> dict:
     if 'password' in data:
         data['password'] = hashPassword(data['password'])
 
-    main.logger.info(data)
     return Response.json(F"User {id} has been updated", 204) \
         if  await UserCrud.update(id, data) else \
         Response.error("Page not found", f"User with id: {id} doesn't exist", 404)

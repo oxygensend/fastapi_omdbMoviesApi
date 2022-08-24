@@ -19,7 +19,7 @@ class AuthMiddleware(AbstractMiddleware):
     AUTHORIZED_URLS = defaultdict(list,{
         'POST': ['\/api\/movie'],
         'GET': ['\/api\/movie','\/api\/users'],
-        'DELETE': ['\/api\/movies','\/api\/users'],
+        'DELETE': ['\/api\/users'],
         'PATCH': ['\/api\/movies', '\/api\/users']
     })
 
@@ -32,7 +32,6 @@ class AuthMiddleware(AbstractMiddleware):
         token = request.headers.get('X-Authorization')
         if not token:
             return Response("Authorization required, please login first.", status_code = 401) 
-
 
         try:
             token =  jwt.decode(request.headers.get('X-Authorization'), SECRET_KEY, ["HS256"])

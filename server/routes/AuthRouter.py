@@ -25,7 +25,6 @@ router2 = APIRouter()
 @router1.post('/auth', response_description="Get Authentication token")
 async def login(data: AuthSchema) -> str :
     data = jsonable_encoder(data)
-    main.logger.info(jsonable_encoder(data))
     user = await user_collection.find_one({"email": data['email']})
     if not user:
         return Response.error("VALIDATION ERRRO","Bad credentials", 400)
@@ -37,7 +36,6 @@ async def login(data: AuthSchema) -> str :
     user['iat'] = issuedAt.timestamp()
     user['exp'] = expiredAt.timestamp()
 
-    main.logger.info(user)
 
     encode_data = jwt.encode(payload=user, key=SECRET_KEY);
 

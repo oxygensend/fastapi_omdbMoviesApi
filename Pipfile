@@ -14,6 +14,7 @@ pyjwt = "*"
 pytest = "*"
 requests = "*"
 numpy = "*"
+fastapi-pagination = "*"
 
 [dev-packages]
 

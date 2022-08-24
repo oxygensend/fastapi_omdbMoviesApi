@@ -1,19 +1,16 @@
 from datetime import date, datetime
 from lib2to3.pgen2.token import OP
-from pydantic import BaseModel, EmailStr, Field
+import re
+from pydantic import BaseModel, EmailStr, Field, validator
 from typing import Optional
 from passlib.context import CryptContext
-import jwt
+from ..database import user_collection
 import main
-
-
 class UserSchema(BaseModel):
     username: str = Field(
         min_length=3, max_length=100, 
     )
-    email: EmailStr = Field(
-      ...
-    )
+    email: EmailStr = Field(...)
     password: str = Field(...)
     isAdmin: bool = Field(...)
     createdAt: Optional[datetime] = datetime.now()
@@ -28,6 +25,22 @@ class UserSchema(BaseModel):
                 "isAdmin": True
             }
         }
+
+    @validator('password')
+    def passwordValidator(cls, v: str) -> str:
+        if not re.compile(r'^(\w){8}\w*$').match(v):
+            raise ValueError("Password must contain at least 5 characters")
+
+        return v
+    
+    @classmethod
+    async def exists(cls, v: str) -> EmailStr:
+        return True if  await user_collection.find_one({"email": v}) else False
+
+
+
+
+
 
 class UserUpdateSchema(BaseModel):
     username: Optional[str]
