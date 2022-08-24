@@ -69,10 +69,13 @@ class MovieFilter(AbstractFilter):
 
     def build(self, params: str) -> tuple:
         
-        params = self._parseUrl(params)
+        if isinstance(params, str):
+            params = self._parseUrl(params)
 
-        self._getFields(params)
-        self._getQuery(params)
+            self._getFields(params)
+            self._getQuery(params)
+        else:
+            self._getFields(params)
         
         return (self.query, self.fields)
 

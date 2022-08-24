@@ -13,6 +13,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 pyjwt = "*"
 pytest = "*"
 requests = "*"
+numpy = "*"
 
 [dev-packages]
 

@@ -8,13 +8,15 @@ from urllib import request, response
 
 import requests
 from server.helpers.MovieParser import MovieParser
+from server.middlewares.AuthMiddleware import AuthMiddleware
 
-from server.models.Movie import MovieSchema
+from server.models.Movie import MovieSchema, StatsSchema
+from server.service.CalculationService import CalculationService
 sys.path.append("..") # Adds higher directory to python modules path.
 from datetime import date, datetime
 from fastapi import APIRouter, Body, Request
 from fastapi.encoders import jsonable_encoder
-
+from fastapi.routing import APIRoute
 import main
 from ..crud.MovieCrud import MovieCrud
 from ..models.Response import Response
@@ -53,3 +55,12 @@ async def deleteMovie(id: str) -> dict:
     return  Response.json(f"Movie {id} has been removed", 204) \
             if await MovieCrud.delete(id) else \
             Response.error("Page not found", f"Movie with id: {id} doesn't exist", 404)
+
+
+@router.post('/stats', response_description="Make calculations on movies data")
+async def getStats(data: StatsSchema = Body(...)) -> dict:
+    data = jsonable_encoder(data)
+    main.logger.info(data)
+    movies = await MovieCrud.retriveAll(data)
+    result = CalculationService.computeStatistics(data['methods'], movies)
+    return  Response.json(result) if isinstance(result,dict) else Response.error("Calculation error", result, 400)

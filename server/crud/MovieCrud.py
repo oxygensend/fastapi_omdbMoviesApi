@@ -15,10 +15,10 @@ class MovieCrud(CrudInterface):
 
         if params:
            filter = MovieFilter()
-           main.logger.info(filter)
            query, fields =  filter.build(params)
         else:
             query, fields = None, None
+        
 
         return [ cls.movieHelper(movie) async for movie in movies_collection.find(query , fields )]
 
@@ -31,8 +31,8 @@ class MovieCrud(CrudInterface):
         else:
             fields = None
 
-
         movie = await movies_collection.find_one({"_id": ObjectId(id)}, fields)
+        main.logger.info(movie)
         return cls.movieHelper(movie) if movie else None
 
     @classmethod

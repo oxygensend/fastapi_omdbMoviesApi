@@ -15,3 +15,16 @@ class MovieSchema(BaseModel):
                 "year": "1233"
             }
         }
+
+
+class StatsSchema(BaseModel):
+    fields: list = Field(...)
+    methods: list = Field(...)
+
+    class Config:
+       schema_extra = {
+            "example": {
+                "fields": ["abc", "abc"],
+                "methods": "[mean]"
+            }
+        } 

@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from urllib.parse import parse_qs
+import main
 
 
 class AbstractFilter(ABC):
@@ -22,9 +23,10 @@ class AbstractFilter(ABC):
 
     def _getFields(self, params) -> None:
         if('fields' in params):
-            fields = params['fields'].split(",")
+            fields = params['fields'] if isinstance(params['fields'], list) else params['fields'].split(",")
             self.fields = { k:1 for k in fields }
 
+        
         if not 'id' in self.fields:
             self.fields['_id'] = 0
 

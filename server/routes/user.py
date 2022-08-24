@@ -15,7 +15,7 @@ from ..models.Response import Response
 
 router = APIRouter()
 
-@router.post("/", response_description="User added into the database")
+@router.post("", response_description="User added into the database")
 async def addUser(user: UserSchema = Body(...)) -> dict:
     user = jsonable_encoder(user)
     user['password'] = hashPassword(user['password']);
@@ -24,7 +24,7 @@ async def addUser(user: UserSchema = Body(...)) -> dict:
     main.logger.info(user)
     return Response.json(new_user, 201)
 
-@router.get("/", response_description="Users retrived from database")
+@router.get("", response_description="Users retrived from database")
 async def getUsers(request: Request) -> dict:
     users = await UserCrud.retriveAll(request.query_params)
     return Response.json(users)
