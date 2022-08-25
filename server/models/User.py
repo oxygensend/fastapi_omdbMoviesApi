@@ -12,7 +12,7 @@ class UserSchema(BaseModel):
     )
     email: EmailStr = Field(...)
     password: str = Field(...)
-    isAdmin: bool = Field(...)
+    isAdmin: Optional[bool] = False
     createdAt: Optional[datetime] = datetime.now()
     updatedAt: Optional[datetime] = None
 

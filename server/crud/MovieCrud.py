@@ -13,12 +13,14 @@ class MovieCrud(CrudInterface):
     @classmethod
     async def retriveAll(cls, params: dict) ->dict:
 
+        main.logger.info(params)
         if params:
            filter = MovieFilter()
            query, fields =  filter.build(params)
         else:
             query, fields = None, None
         
+
 
         return [ cls.movieHelper(movie) async for movie in movies_collection.find(query , fields )]
 

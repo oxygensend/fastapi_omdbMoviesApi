@@ -23,6 +23,9 @@ class UserFilter(AbstractFilter):
         
         if('email' in params):
             self.query['email'] = params['email']
+        
+        if('admin' in params):
+            self.query['isAdmin'] = params['admin']
 
 
     def build(self, params: str) -> tuple:

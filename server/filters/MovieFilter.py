@@ -12,6 +12,7 @@ class MovieFilter(AbstractFilter):
     
     def _getQuery(self, params) -> None:
 
+        main.logger.info(params)
         if('title' in params):
             self.query['title'] = params['title']
         
@@ -30,53 +31,51 @@ class MovieFilter(AbstractFilter):
             self.query['directors'] = {"$regex": "|".join(directors), "$options": "-i"}
 
         if("runtime_lt" in params and "runtime_gt" in params):
-            self.query['runtime'] = {"$lt": params['runtime_lt'], '$gt': params['runtime_gt']}
+            self.query['runtime'] = {"$lt": float(params['runtime_lt']), '$gt': float(params['runtime_gt'])}
         elif("runtime_lt" in params):
-            self.query['runtime'] = {"$lt": params['runtime_lt']}
+            self.query['runtime'] = {"$lt": float(params['runtime_lt'])}
         elif("runtime_gt" in params):
-            self.query['runtime'] = {"$gt": params['runtime_gt']}
+            self.query['runtime'] = {"$gt": float(params['runtime_gt'])}
         
         if("votes_lt" in params and "votes_lt" in params):
-            self.query['votes'] = {"$lt": params['votes_lt'], '$gt': params['votes_gt']}
+            self.query['votes'] = {"$lt": float(params['votes_lt']), '$gt': float(params['votes_gt'])}
         elif("votes_lt" in params):
-            self.query['votes'] = {"$lt": params['votes_lt']}
+            self.query['votes'] = {"$lt": float(params['votes_lt'])}
         elif("votes_gt" in params):
-            self.query['votes'] = {"$gt": params['votes_gt']}
+            self.query['votes'] = {"$gt": float(params['votes_gt'])}
 
         if("rating_lt" in params and "rating_gt" in params):
-            self.query['rating'] = {"$lt": params['rating_lt'], '$gt': params['rating_gt']}
+            self.query['rating'] = {"$lt": float(params['rating_lt']), '$gt': float(params['rating_gt'])}
         elif("rating_lt" in params):
-            self.query['rating'] = {"$lt": params['rating_lt']}
+            self.query['rating'] = {"$lt": float(params['rating_lt'])}
         elif("rating_gt" in params): 
-            self.query['rating'] = {"$gt": params['rating_gt']}
+            self.query['rating'] = {"$gt": float(params['rating_gt'])}
 
         if("metascore_lt" in params and "metascore_gt" in params):
-            self.query['metascore'] = {"$lt": params['metascore_lt'], '$gt': params['metascore_gt']}
+            self.query['metascore'] = {"$lt": float(params['metascore_lt']), '$gt': float(params['metascore_gt'])}
         elif("metascore_gt" in params):
-            self.query['metascore'] = {"$lt": params['metascore_lt']}
+            self.query['metascore'] = {"$lt": float(params['metascore_lt'])}
         elif("metascore_gt" in params):
-            self.query['metascore'] = {"$gt": params['metascore_gt']}
+            self.query['metascore'] = {"$gt": float(params['metascore_gt'])}
 
         if("income_lt" in params and "income_gt" in params):
-            self.query['income'] = {"$lt": params['income_lt'], '$gt': params['income_gt']}
+            self.query['income'] = {"$lt": float(params['income_lt']), '$gt': float(params['income_gt'])}
         elif("income_lt" in params):
-            self.query['income'] = {"$lt": params['income_lt']}
+            self.query['income'] = {"$lt": float(params['income_lt'])}
         elif("income_gt" in params):
-            self.query['income'] = {"$gt": params['income_gt']}
+            self.query['income'] = {"$gt": float(params['income_gt'])}
 
 
+    
 
-
-    def build(self, params: str) -> tuple:
+    def build(self, params) -> tuple:
         
-        if isinstance(params, str):
+        if isinstance(params, dict):
+            self._getFields(params)
+        else:
             params = self._parseUrl(params)
-
             self._getFields(params)
             self._getQuery(params)
-        else:
-            self._getFields(params)
-        
         return (self.query, self.fields)
 
 
